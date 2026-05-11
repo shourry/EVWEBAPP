@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="EV Connect is a smart EV charging station locator and slot booking prototype for sustainable mobility. Find nearby chargers, book time slots, and manage your bookings in one clean app." />
+    <meta name="keywords"
+        content="EV charging, electric vehicle, station locator, slot booking, smart mobility, sustainability, green transport" />
+    <meta name="author" content="EV Connect" />
+    <title>EV Connect | Charging Station Locator & Slot Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "EV Connect",
+    "url": "https://example.com",
+    "headline": "EV Charging Station Locator & Slot Booking System",
+    "description": "A modern prototype for locating EV charging stations, filtering charger types, and booking slots with a smooth user experience.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "EV Connect"
+    }
+  }
+  </script>
+</head>
+
+<body>
+    <header class="topbar" id="top">
+        <div class="container nav-container">
+            <a href="#top" class="logo" aria-label="EV Connect home">EV<span>Connect</span></a>
+            <nav class="main-nav" aria-label="Primary navigation">
+                <a href="#home">Home</a>
+                <a href="#stations">Find Stations</a>
+                <a href="#booking">Book Slot</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="auth-status" id="authStatus" aria-live="polite">Guest</div>
+                <button class="btn btn-outline" id="logoutBtn" hidden>Logout</button>
+                <button class="btn btn-outline" id="loginBtn">Login</button>
+                <button class="btn btn-primary" id="registerBtn">Register</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="modal" id="loginModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+            <button class="modal-close" id="closeLoginModal" aria-label="Close login dialog">×</button>
+            <h2 id="loginTitle">Login to EV Connect</h2>
+            <form id="loginForm" class="auth-form">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" name="email" required placeholder="you@example.com" />
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" name="password" required placeholder="Enter your password" />
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="auth-switch">New here? <button type="button" class="link-button" id="showRegister">Create
+                        account</button></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+            <button class="modal-close" id="closeRegisterModal" aria-label="Close register dialog">×</button>
+            <h2 id="registerTitle">Create your account</h2>
+            <form id="registerForm" class="auth-form">
+                <label for="registerName">Full Name</label>
+                <input type="text" id="registerName" name="name" required placeholder="Your name" />
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" name="email" required placeholder="you@example.com" />
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" name="password" required placeholder="Create a password" />
+                <button type="submit" class="btn btn-primary">Register</button>
+                <p class="auth-switch">Already have an account? <button type="button" class="link-button"
+                        id="showLogin">Login now</button></p>
+            </form>
+        </div>
+    </div>
+    <main>
+        <section class="hero" id="home" aria-label="Hero section">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <p class="eyebrow">Smart Mobility · Clean Energy · Electric Future</p>
+                    <h1>Charge Smart. Drive Smart.</h1>
+                    <p>EV Connect helps drivers discover nearby charging stations, compare availability, and book secure
+                        time slots instantly.</p>
+                    <div class="hero-cta">
+                        <a class="btn btn-primary" href="#stations">Find Station</a>
+                        <a class="btn btn-secondary" href="#booking">Book Now</a>
+                    </div>
+                    <div class="hero-highlights">
+                        <div>
+                            <strong>Fast filters</strong>
+                            <span>Choose normal, fast, or ultra-fast chargers.</span>
+                        </div>
+                        <div>
+                            <strong>Real-time slots</strong>
+                            <span>Simulated live availability for instant booking.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="hero-card">
+                        <div class="hero-chip">Live Station Locator</div>
+                        <div class="map-placeholder">
+                            <div class="map-pin">&#9679;</div>
+                            <p>Interactive map preview for city search &amp; station selection.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="locator-section" id="stations">
+            <div class="container section-header">
+                <p class="eyebrow">Live Station Locator</p>
+                <h2>Find a charging station nearby</h2>
+                <p>Search by city or location and filter chargers by speed with instant station results.</p>
+            </div>
+            <div class="locator-grid">
+                <div class="locator-panel">
+                    <form class="search-panel" id="stationSearchForm">
+                        <label for="stationSearch">Search by city or location</label>
+                        <input type="search" id="stationSearch" name="stationSearch" placeholder="e.g. Mumbai"
+                            aria-label="Search by city or location" />
+                        <fieldset>
+                            <legend>Filter by charger type</legend>
+                            <label><input type="radio" name="chargerType" value="All" checked /> All</label>
+                            <label><input type="radio" name="chargerType" value="Normal" /> Normal</label>
+                            <label><input type="radio" name="chargerType" value="Fast" /> Fast</label>
+                            <label><input type="radio" name="chargerType" value="Ultra Fast" /> Ultra Fast</label>
+                        </fieldset>
+                    </form>
+                    <div class="map-card" aria-label="Map placeholder">
+                        <div class="map-caption">OpenStreetMap preview</div>
+                        <div class="mapframe">
+                            <div class="map-overlay">Map integration placeholder</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="station-cards" id="stationResults" aria-live="polite">
+                    <!-- Station cards inserted by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section class="booking-section" id="booking">
+            <div class="container section-header">
+                <p class="eyebrow">Slot Booking System</p>
+                <h2>Reserve a charging slot in seconds</h2>
+                <p>Choose your vehicle, date, and slot time. Availability updates in real time.</p>
+            </div>
+            <div class="booking-grid">
+                <div class="booking-panel">
+                    <form id="bookingForm">
+                        <div class="form-row">
+                            <label for="bookingStation">Station</label>
+                            <select id="bookingStation" name="bookingStation" required>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="bookingDate">Date</label>
+                            <input type="date" id="bookingDate" name="bookingDate" min="2026-04-28" required />
+                        </div>
+                        <div class="form-row">
+                            <label for="bookingTime">Time slot</label>
+                            <select id="bookingTime" name="bookingTime" required>
+                                <option value="08:00 - 09:00">08:00 - 09:00</option>
+                                <option value="09:00 - 10:00">09:00 - 10:00</option>
+                                <option value="10:00 - 11:00">10:00 - 11:00</option>
+                                <option value="17:00 - 18:00">17:00 - 18:00</option>
+                                <option value="18:00 - 19:00">18:00 - 19:00</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="vehicleType">Vehicle type</label>
+                            <select id="vehicleType" name="vehicleType" required>
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Hatchback">Hatchback</option>
+                                <option value="Truck">Truck</option>
+                            </select>
+                        </div>
+                        <div class="availability-panel" aria-live="polite">
+                            <h3>Real-time availability</h3>
+                            <p id="availabilityText">Select a station and time slot to see availability.</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    </form>
+                </div>
+                <div class="booking-sidebar">
+                    <div class="dashboard-card" aria-label="Upcoming bookings">
+                        <h3>Upcoming Bookings</h3>
+                        <ul id="upcomingList"></ul>
+                    </div>
+                    <div class="dashboard-card" aria-label="Booking history">
+                        <h3>Booking History</h3>
+                        <ul id="historyList"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="steps-section" id="how-it-works">
+            <div class="container section-header text-center">
+                <p class="eyebrow">How It Works</p>
+                <h2>Fast, intuitive booking in four steps</h2>
+            </div>
+            <div class="steps-grid">
+                <article class="step-card">
+                    <span class="step-number">1</span>
+                    <h3>Search</h3>
+                    <p>Find stations by city and charger type with live results.</p>
+                </article>
+                <article class="step-card">
+                    <span class="step-number">2</span>
+                    <h3>Select</h3>
+                    <p>Choose the best station based on distance, price, and availability.</p>
+                </article>
+                <article class="step-card">
+                    <span class="step-number">3</span>
+                    <h3>Book</h3>
+                    <p>Reserve a slot with a date picker and vehicle type options.</p>
+                </article>
+                <article class="step-card">
+                    <span class="step-number">4</span>
+                    <h3>Charge</h3>
+                    <p>Arrive on time and enjoy a streamlined charging experience.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="container section-header text-center">
+                <p class="eyebrow">Features</p>
+                <h2>Designed for sustainable EV journeys</h2>
+            </div>
+            <div class="features-grid">
+                <article class="feature-card">
+                    <h3>Real-time availability</h3>
+                    <p>Simulated live status updates keep drivers informed and ready.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Smart scheduling</h3>
+                    <p>Book slots fast and reduce idle time at stations.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Secure booking</h3>
+                    <p>Saved bookings use browser storage to simulate backend persistence.</p>
+                </article>
+                <article class="feature-card">
+                    <h3>Eco-friendly mobility</h3>
+                    <p>Support cleaner transport with a modern interface built for EV drivers.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="contact">
+        <div class="container footer-grid">
+            <div>
+                <a href="#top" class="logo footer-logo">EV<span>Connect</span></a>
+                <p>Connecting EV drivers with fast, reliable charging options.</p>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>hello@evconnect.com</p>
+                <p>+91 88179 99746</p>
+            </div>
+            <div>
+                <h4>Quick Links</h4>
+                <nav class="footer-links" aria-label="Footer quick links">
+                    <a href="#stations">Find Stations</a>
+                    <a href="#booking">Book Slot</a>
+                    <a href="#how-it-works">How It Works</a>
+                </nav>
+            </div>
+            <div>
+                <h4>Follow</h4>
+                <div class="social-links">
+                    <a href="https://twitter.com/evconnect" target="_blank" rel="noopener"
+                        aria-label="twitter">twitter</a>
+                    <a href="https://linkedin.com/company/ev-connect" target="_blank" rel="noopener"
+                        aria-label="LinkedIn">LinkedIn</a>
+                    <a href="https://instagram.com/evconnect" target="_blank" rel="noopener"
+                        aria-label="Instagram">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 EV Connect. Built for Smart Mobility.</p>
+        </div>
+    </footer>
+
+    <div class="modal" id="confirmationModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="modal-close" id="closeModal" aria-label="Close confirmation dialog">×</button>
+            <h2 id="modalTitle">Booking Confirmed</h2>
+            <p id="modalMessage">Your slot is reserved. Here are the details.</p>
+            <ul class="booking-summary" id="bookingSummary"></ul>
+            <button class="btn btn-primary" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+
+    <script src="js/app.js" defer></script>
+</body>
+
+</html>
