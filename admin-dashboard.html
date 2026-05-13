@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Admin Dashboard for EV Connect - Manage users, bookings, and stations" />
+    <title>Admin Dashboard | EV Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin-style.css" />
+</head>
+
+<body>
+    <div class="admin-container">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h1 class="sidebar-logo">EV<span>Admin</span></h1>
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+            </div>
+
+            <nav class="admin-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+                <a href="#users" class="nav-item" data-section="users">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Users</span>
+                </a>
+                <a href="#bookings" class="nav-item" data-section="bookings">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">Bookings</span>
+                </a>
+                <a href="#stations" class="nav-item" data-section="stations">
+                    <span class="nav-icon">⚡</span>
+                    <span class="nav-label">Stations</span>
+                </a>
+                <a href="#settings" class="nav-item" data-section="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-outline" id="logoutAdminBtn">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Top Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <div class="admin-user-info">
+                        <span id="adminName">Admin</span>
+                        <small id="adminEmail">admin@evconnect.com</small>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="admin-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="content-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-content">
+                                <h3>Total Users</h3>
+                                <p class="stat-number" id="totalUsers">0</p>
+                                <small class="stat-change" id="usersChange">+0 this month</small>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-content">
+                                <h3>Total Bookings</h3>
+                                <p class="stat-number" id="totalBookings">0</p>
+                                <small class="stat-change" id="bookingsChange">+0 this month</small>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-content">
+                                <h3>Active Stations</h3>
+                                <p class="stat-number" id="totalStations">6</p>
+                                <small class="stat-change">All operational</small>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-content">
+                                <h3>System Health</h3>
+                                <p class="stat-number">100%</p>
+                                <small class="stat-change">All systems normal</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3>Recent Users</h3>
+                            <div id="recentUsersList" class="list-container">
+                                <p class="empty-message">No users yet</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3>Recent Bookings</h3>
+                            <div id="recentBookingsList" class="list-container">
+                                <p class="empty-message">No bookings yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Section -->
+                <section id="users-section" class="content-section">
+                    <div class="section-header">
+                        <h3>Manage Users</h3>
+                        <input type="text" id="userSearchInput" class="search-input" placeholder="Search users...">
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Bookings Section -->
+                <section id="bookings-section" class="content-section">
+                    <div class="section-header">
+                        <h3>Manage Bookings</h3>
+                        <select id="bookingFilterSelect" class="filter-select">
+                            <option value="">All Bookings</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Station</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTableBody">
+                                <tr>
+                                    <td colspan="6" class="empty-message">Loading bookings...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Stations Section -->
+                <section id="stations-section" class="content-section">
+                    <div class="section-header">
+                        <h3>Manage Charging Stations</h3>
+                        <button class="btn btn-primary" id="addStationBtn">+ Add Station</button>
+                    </div>
+
+                    <div class="stations-grid">
+                        <div class="station-card">
+                            <div class="station-header">
+                                <h4>Mumbai Metro Charge</h4>
+                                <span class="badge badge-available">Available</span>
+                            </div>
+                            <div class="station-info">
+                                <p><strong>City:</strong> Mumbai</p>
+                                <p><strong>Type:</strong> Fast</p>
+                                <p><strong>Price:</strong> ₹24/kWh</p>
+                            </div>
+                            <div class="station-actions">
+                                <button class="btn btn-small btn-outline">Edit</button>
+                                <button class="btn btn-small btn-danger">Delete</button>
+                            </div>
+                        </div>
+
+                        <div class="station-card">
+                            <div class="station-header">
+                                <h4>Delhi Green Charger</h4>
+                                <span class="badge badge-busy">Busy</span>
+                            </div>
+                            <div class="station-info">
+                                <p><strong>City:</strong> New Delhi</p>
+                                <p><strong>Type:</strong> Normal</p>
+                                <p><strong>Price:</strong> ₹22/kWh</p>
+                            </div>
+                            <div class="station-actions">
+                                <button class="btn btn-small btn-outline">Edit</button>
+                                <button class="btn btn-small btn-danger">Delete</button>
+                            </div>
+                        </div>
+
+                        <div class="station-card">
+                            <div class="station-header">
+                                <h4>Bengaluru Rapid Hub</h4>
+                                <span class="badge badge-available">Available</span>
+                            </div>
+                            <div class="station-info">
+                                <p><strong>City:</strong> Bengaluru</p>
+                                <p><strong>Type:</strong> Ultra Fast</p>
+                                <p><strong>Price:</strong> ₹28/kWh</p>
+                            </div>
+                            <div class="station-actions">
+                                <button class="btn btn-small btn-outline">Edit</button>
+                                <button class="btn btn-small btn-danger">Delete</button>
+                            </div>
+                        </div>
+
+                        <div class="station-card">
+                            <div class="station-header">
+                                <h4>Hyderabad EV Point</h4>
+                                <span class="badge badge-available">Available</span>
+                            </div>
+                            <div class="station-info">
+                                <p><strong>City:</strong> Hyderabad</p>
+                                <p><strong>Type:</strong> Fast</p>
+                                <p><strong>Price:</strong> ₹25/kWh</p>
+                            </div>
+                            <div class="station-actions">
+                                <button class="btn btn-small btn-outline">Edit</button>
+                                <button class="btn btn-small btn-danger">Delete</button>
+                            </div>
+                        </div>
+
+                        <div class="station-card">
+                            <div class="station-header">
+                                <h4>Pune Charge Plaza</h4>
+                                <span class="badge badge-busy">Busy</span>
+                            </div>
+                            <div class="station-info">
+                                <p><strong>City:</strong> Pune</p>
+                                <p><strong>Type:</strong> Normal</p>
+                                <p><strong>Price:</strong> ₹21/kWh</p>
+                            </div>
+                            <div class="station-actions">
+                                <button class="btn btn-small btn-outline">Edit</button>
+                                <button class="btn btn-small btn-danger">Delete</button>
+                            </div>
+                        </div>
+
+                        <div class="station-card">
+                            <div class="station-header">
+                                <h4>Chennai Spark Station</h4>
+                                <span class="badge badge-available">Available</span>
+                            </div>
+                            <div class="station-info">
+                                <p><strong>City:</strong> Chennai</p>
+                                <p><strong>Type:</strong> Ultra Fast</p>
+                                <p><strong>Price:</strong> ₹27/kWh</p>
+                            </div>
+                            <div class="station-actions">
+                                <button class="btn btn-small btn-outline">Edit</button>
+                                <button class="btn btn-small btn-danger">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings-section" class="content-section">
+                    <div class="settings-container">
+                        <div class="card">
+                            <h3>System Settings</h3>
+                            <div class="setting-group">
+                                <label>
+                                    <input type="checkbox" id="maintenanceMode"> Enable Maintenance Mode
+                                </label>
+                                <p class="setting-description">Prevent users from accessing the system during maintenance</p>
+                            </div>
+                            <div class="setting-group">
+                                <label>
+                                    <input type="checkbox" id="emailNotifications" checked> Email Notifications
+                                </label>
+                                <p class="setting-description">Send notifications to users about their bookings</p>
+                            </div>
+                            <div class="setting-group">
+                                <label>
+                                    <input type="checkbox" id="bookingReminders" checked> Booking Reminders
+                                </label>
+                                <p class="setting-description">Send reminders 24 hours before booking time</p>
+                            </div>
+                            <button class="btn btn-primary mt-3">Save Settings</button>
+                        </div>
+
+                        <div class="card">
+                            <h3>Admin Profile</h3>
+                            <div class="form-group">
+                                <label for="adminFullName">Full Name</label>
+                                <input type="text" id="adminFullName" placeholder="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="adminPassword">Change Password</label>
+                                <input type="password" id="adminPassword" placeholder="New password">
+                            </div>
+                            <button class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal" aria-hidden="true">
+        <div class="modal-content">
+            <h2>Confirm Deletion</h2>
+            <p id="deleteMessage">Are you sure you want to delete this item?</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div class="modal" id="userDetailsModal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" id="closeUserDetailsModal">×</button>
+            <h2>User Details</h2>
+            <div id="userDetailsContent"></div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
